@@ -1,5 +1,6 @@
 
 import java.nio.file.Paths;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,16 +17,28 @@ public class StoringRecords {
         System.out.println("Persons:");
         for (Person person : records) {
             System.out.println(person);
-
         }
     }
 
     public static ArrayList<Person> readRecordsFromFile(String file) {
         ArrayList<Person> persons = new ArrayList<>();
-
+        
+        try(Scanner fReader = new Scanner(Paths.get(file))) {
+            while(fReader.hasNextLine()) {
+                String line = fReader.nextLine();
+                if(line.isEmpty()) {
+                    continue;
+                }
+                String[] words = line.split(",");
+                String name = words[0];
+                int age = Integer.valueOf(words[1]);
+                persons.add(new Person(name, age));
+            }
+        } catch(Exception e) {
+            System.out.println("Error"+e);
+        }
         // Write here the code for reading from file
         // and printing the read records
         return persons;
-
     }
 }
